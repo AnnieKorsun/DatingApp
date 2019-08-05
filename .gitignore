@@ -1,0 +1,11 @@
+#VS
+.vs
+.vscode
+
+#Folders
+bin
+obj
+packages
+
+#Extensions
+*.db
