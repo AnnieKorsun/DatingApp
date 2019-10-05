@@ -1,3 +1,4 @@
+import { AuthClient } from './../client/dating-api-client';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -9,12 +10,16 @@ export class NavComponent implements OnInit {
 
   model: any = {};
 
-  constructor() { }
+  constructor(private readonly client: AuthClient) { }
 
   ngOnInit() {
   }
 
   login() {
-    console.log(this.model);
+    this.client.login(this.model).subscribe(next => {
+      console.log('Logged in successfully');
+    }, error => {
+      console.log('Failed to login');
+    });
   }
 }

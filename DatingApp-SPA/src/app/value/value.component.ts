@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { ValuesClient } from '../client/dating-api-client';
 
 @Component({
   selector: 'app-value',
@@ -10,14 +10,14 @@ export class ValueComponent implements OnInit {
 
   values: any;
 
-  constructor(private readonly http: HttpClient) { }
+  constructor(private readonly client: ValuesClient) { }
 
   ngOnInit() {
     this.getValues();
   }
 
   getValues() {
-    this.http.get('http://localhost:5000/api/values').subscribe(response => {
+    this.client.getValues().subscribe(response => {
       this.values = response;
     }, error => {
       console.error(error);

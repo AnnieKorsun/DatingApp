@@ -6,19 +6,25 @@ import { AppComponent } from './app.component';
 import { ValueComponent } from './value/value.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NavComponent } from './nav/nav.component';
+import { API_BASE_URL, ValuesClient, AuthClient } from './client/dating-api-client';
+import { environment } from '../environments/environment';
 
 @NgModule({
    declarations: [
       AppComponent,
-      ValueComponent
+      ValueComponent,
       NavComponent
    ],
    imports: [
       BrowserModule,
-      HttpClientModule
+      HttpClientModule,
       FormsModule
    ],
-   providers: [],
+   providers: [
+     { provide: AuthClient, useClass: AuthClient},
+     { provide: ValuesClient, useClass: ValuesClient},
+     { provide: API_BASE_URL, useValue: environment.servicesUrl}
+   ],
    bootstrap: [
       AppComponent
    ]
