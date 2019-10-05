@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using System.Text;
 using DatingApp.API.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -8,11 +11,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace DatingApp.API
 {
     public class Startup
     {
+        private const string ApiName = "DatingAppApiSpecification";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -37,6 +42,17 @@ namespace DatingApp.API
                     ValidateAudience = false
                 };
             });
+            services.AddSwaggerGen(setupAction => {
+                setupAction.SwaggerDoc(ApiName, new Info(){
+                    Title = "Dating App Api",
+                    Version = "1"
+                });
+
+                var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
+
+                setupAction.IncludeXmlComments(xmlCommentsFullPath, true);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +69,10 @@ namespace DatingApp.API
             }
 
             // app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI(setupAction => {
+                setupAction.SwaggerEndpoint($"/swagger/{ApiName}/swagger.json", "Dating API");
+            });
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
             app.UseMvc();

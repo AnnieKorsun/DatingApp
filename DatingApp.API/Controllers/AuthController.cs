@@ -12,6 +12,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace DatingApp.API.Controllers
 {
+    /// <summary>
+    /// Authentication methods 
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
@@ -19,13 +22,25 @@ namespace DatingApp.API.Controllers
         private readonly IAuthRepository _repo;
         private readonly IConfiguration _configuration;
 
+        /// <summary>
+        /// Instantiates AuthController
+        /// </summary>
+        /// <param name="repo">AuthRepository</param>
+        /// <param name="configuration">Application configuration</param>
         public AuthController(IAuthRepository repo, IConfiguration configuration)
         {
             _repo = repo;
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// New user registration.
+        /// </summary>
+        /// <param name="userForRegisterDto">User for registration model.</param>
+        /// <returns></returns>
         [HttpPost("register")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
             if (!ModelState.IsValid)
@@ -45,7 +60,14 @@ namespace DatingApp.API.Controllers
             return StatusCode(201);
         }
 
+        /// <summary>
+        /// User login.
+        /// </summary>
+        /// <param name="userForLoginDto"></param>
+        /// <returns></returns>
         [HttpPost("login")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
             var userFromRepo = await _repo.Login(userForLoginDto.Username.ToLower(), userForLoginDto.Password);
