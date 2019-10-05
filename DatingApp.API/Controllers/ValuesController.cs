@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DatingApp.API.Data;
+using DatingApp.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,8 +32,9 @@ namespace DatingApp.API.Controllers
         /// Returns all values.
         /// </summary>
         /// <returns>Values list</returns>
+        [AllowAnonymous]
         [HttpGet]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(IEnumerable<Value>), 200)]
         public async Task<IActionResult> GetValuesAsync()
         {
             var values = await _context.Values.ToListAsync();
@@ -45,7 +48,7 @@ namespace DatingApp.API.Controllers
         /// <returns>Value</returns>
         [AllowAnonymous]
         [HttpGet("{id}")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(Value), 200)]
         public IActionResult GetValue(int id)
         {
             var value = _context.Values.FirstOrDefault(x=>x.Id == id);

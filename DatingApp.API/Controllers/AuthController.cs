@@ -66,7 +66,7 @@ namespace DatingApp.API.Controllers
         /// <param name="userForLoginDto"></param>
         /// <returns></returns>
         [HttpPost("login")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(401)]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
@@ -96,10 +96,8 @@ namespace DatingApp.API.Controllers
             var tokenHandler = new JwtSecurityTokenHandler();
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return Ok(new {
-                token = tokenHandler.WriteToken(token)
-            });
+            
+            return Ok(tokenHandler.WriteToken(token));
         }
     }
 }
