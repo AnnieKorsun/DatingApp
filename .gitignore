@@ -36,3 +36,6 @@ msbuild.wrn
 #Extensions
 *.db
 .vs/
+
+#configuration
+appsettings.json

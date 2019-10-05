@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using DatingApp.API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -55,7 +56,7 @@ namespace DatingApp.API.Data
         {
             using (var hmac = new HMACSHA512(passwordSalt))
             {
-                var computedHash = passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                var computedHash = passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 
                 for (int i = 0; i < computedHash.Length; i++)
                 {
