@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NavComponent } from './nav/nav.component';
 import { API_BASE_URL, ValuesClient, AuthClient } from './client/dating-api-client';
 import { environment } from '../environments/environment';
+import { ErrorInterceptorProvider } from './services/error.interceptor';
 
 @NgModule({
    declarations: [
@@ -23,6 +24,7 @@ import { environment } from '../environments/environment';
       FormsModule
    ],
    providers: [
+     ErrorInterceptorProvider
      { provide: AuthClient, useClass: AuthClient},
      { provide: ValuesClient, useClass: ValuesClient},
      { provide: API_BASE_URL, useValue: environment.servicesUrl}
