@@ -20,11 +20,6 @@ export class ErrorInterceptor implements HttpInterceptor {
               return throwError(applicationError);
             }
             const serverError = error.error;
-            if(serverError instanceof Blob) {
-              const errorAsBlob = serverError as Blob;
-              const reader = new FileReader();
-              reader.readAsText(errorAsBlob);
-            }
             let modalStateErrors = '';
             if (serverError.errors && serverError.errors === 'object') {
               for (const key in serverError.errors) {
