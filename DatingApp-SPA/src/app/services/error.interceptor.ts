@@ -1,25 +1,30 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpErrorResponse, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpInterceptor, HttpErrorResponse, HTTP_INTERCEPTORS, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { throwError, Observable } from 'rxjs';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
     intercept(
-      req: import('@angular/common/http').HttpRequest<any>,
-      next: import('@angular/common/http').HttpHandler
-    ): import('rxjs').Observable<import('@angular/common/http').HttpEvent<any>> {
+      req: HttpRequest<any>,
+      next: HttpHandler
+    ): Observable<HttpEvent<any>> {
       return next.handle(req).pipe(
         catchError(error => {
           if (error.status === 401) {
             return throwError(error.statusText);
           }
           if (error instanceof HttpErrorResponse) {
-            const applicationError = error.headers.get("Application-Error");
+            const applicationError = error.headers.get('Application-Error');
             if (applicationError) {
               return throwError(applicationError);
             }
             const serverError = error.error;
+            if(serverError instanceof Blob) {
+              const errorAsBlob = serverError as Blob;
+              const reader = new FileReader();
+              reader.readAsText(errorAsBlob);
+            }
             let modalStateErrors = '';
             if (serverError.errors && serverError.errors === 'object') {
               for (const key in serverError.errors) {

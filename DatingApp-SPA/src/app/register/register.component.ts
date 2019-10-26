@@ -1,5 +1,6 @@
 import { AuthClient, UserForRegisterDto } from './../client/dating-api-client';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { AlertifyService } from '../services/alertify.service';
 
 @Component({
   selector: 'app-register',
@@ -12,7 +13,7 @@ export class RegisterComponent implements OnInit {
 
   model: any = {};
 
-  constructor(private readonly client: AuthClient) { }
+  constructor(private readonly client: AuthClient, private readonly alertify: AlertifyService) { }
 
   ngOnInit() {
   }
@@ -23,14 +24,13 @@ export class RegisterComponent implements OnInit {
     user.password = this.model.password;
 
     this.client.register(user).subscribe(() => {
-      console.log('registration successful');
+      this.alertify.success('Registration successful');
     }, error => {
-      console.log(error);
+      this.alertify.error(error);
     });
   }
 
   cancel() {
     this.cancelRegister.emit(false);
-    console.log('cancelled');
   }
 }

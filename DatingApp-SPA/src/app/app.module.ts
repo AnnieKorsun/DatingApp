@@ -24,7 +24,7 @@ import { ErrorInterceptorProvider } from './services/error.interceptor';
       FormsModule
    ],
    providers: [
-     ErrorInterceptorProvider
+     ErrorInterceptorProvider,
      { provide: AuthClient, useClass: AuthClient},
      { provide: ValuesClient, useClass: ValuesClient},
      { provide: API_BASE_URL, useValue: environment.servicesUrl}
